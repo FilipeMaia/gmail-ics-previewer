@@ -1,0 +1,24 @@
+{
+  "timeZone": "Etc/GMT",
+  "dependencies": {
+    "enabledAdvancedServices": []
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/gmail.addons.execute",
+    "https://www.googleapis.com/auth/gmail.readonly",
+    "https://www.googleapis.com/auth/calendar"
+  ],
+  "gmail": {
+    "name": "ICS Previewer",
+    "logoUrl": "https://www.gstatic.com/images/icons/material/system/1x/event_black_24dp.png",
+    "contextualTriggers": [
+      {
+        "unconditional": {},
+        "onTriggerFunction": "buildContextualCard"
+      }
+    ],
+    "primaryColor": "#4285F4"
+  }
+}
