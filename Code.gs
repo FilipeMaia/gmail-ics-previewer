@@ -1,6 +1,17 @@
-// CONFIGURATION
-// This is the default target for "floating" times, but we prioritize the file's TZID first.
-const DEFAULT_TIMEZONE = "Europe/Stockholm";
+/**
+ * Retrieves the timezone from the user's Google Calendar settings.
+ * Returns a string like "Europe/Stockholm" or "America/New_York".
+ */
+function getUserTimezone() {
+  try {
+    return CalendarApp.getDefaultCalendar().getTimeZone();
+  } catch (e) {
+    // Fallback if permission is missing or API fails
+    return "Etc/GMT";
+  }
+}
+
+const DEFAULT_TIMEZONE = getUserTimezone();
 
 function buildContextualCard(e) {
   var messageId = e.gmail.messageId;

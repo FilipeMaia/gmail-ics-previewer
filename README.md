@@ -1,28 +1,21 @@
 # Gmail ICS Calendar Add-on (Exchange Fix)
 
-A vibe-coded private Google Workspace Add-on that forces Gmail to handle `.ics` calendar invitations correctly, even when they are synced via IMAP or forwarded from Microsoft Exchange.
+A private Google Workspace Add-on that forces Gmail to handle `.ics` calendar invitations correctly, even when they are synced via IMAP or forwarded from Microsoft Exchange.
 
 ##  The Problem
 If you sync your work email (Exchange/Outlook) to Gmail using **IMAP**, Google Calendar often treats invitations as static file attachments rather than interactive events.
-*  No "Yes/No/Maybe" buttons.
 *  No "Add to Calendar" button.
 *  Timezone issues (events showing at wrong times).
-*  Missing Microsoft Teams/Zoom links.
+*  Missing Teams/Zoom links.
 
 ##  The Solution
 This Google Apps Script creates a **custom sidebar** in Gmail. When you open an email with an `.ics` attachment:
 1.  It reads the file and **previews** the event details (Title, Time, Location).
-2.  It intelligently **parses Microsoft Teams/Zoom links** and puts them in the Location field.
-3.  It handles **Timezone Mapping** (fixing the "GMT Standard Time" vs. "Europe/London" issue).
-4.  It allows you to **Add to Calendar** with a single click.
+2.  It allows you to **Add to Calendar** with a single click.
+3.  It intelligently **parses Teams/Zoom links** and puts them in the Location field.
+4.  It handles **Timezone Mapping**.
+5. **Privacy First:** Runs entirely within your own Google Account. No data is sent to third-party servers.
 
-##  Features
-* **Smart Link Detection:** Automatically extracts `X-MICROSOFT-SKYPETEAMSMEETINGURL` and puts it in the location field so it's clickable.
-* **Timezone Aware:** correctly maps Windows timezones (e.g., "Romance Standard Time") to IANA timezones (e.g., "Europe/Paris") to prevent events from being 1 hour off.
-* **Robust Parsing:** Handles line-folding (split lines) in `.ics` files that often break other parsers.
-* **Privacy First:** Runs entirely within your own Google Account. No data is sent to third-party servers.
-
----
 
 ##  Installation Guide
 
@@ -64,3 +57,44 @@ By default, the manifest file is hidden.
     "primaryColor": "#4285F4"
   }
 }
+
+```
+
+### Step 3: Add the Code (`Code.gs`)
+
+1. Click on `Code.gs` in the file list.
+2. **Delete** any placeholder code (like `function myFunction...`).
+3. **Copy and Paste** the full script from `Code.gs` in this repository.
+* *Note: Ensure you set the `const DEFAULT_TIMEZONE` at the top of the file to your local timezone.*
+
+
+
+### Step 4: Deploy & Authorize
+
+1. Click the blue **Deploy** button (top right) > **Test deployments**.
+2. Click **Install** (next to the "Gmail" application type).
+3. Click **Done**.
+4. Open **Gmail** in a new tab (or refresh if open).
+5. Open any email that has an `.ics` attachment.
+6. Look for the **Event Icon** () in the right-hand sidebar.
+7. Click it. You will be asked to **Authorize** the script. Click "Review Permissions" and allow it.
+
+
+##  Troubleshooting
+
+**"Specified permissions are not sufficient"**
+
+* You likely didn't update `appsscript.json` correctly. Make sure `.../auth/calendar` is listed in the `oauthScopes` section, not just `calendar.events`.
+
+**The sidebar doesn't appear**
+
+* Ensure you are opening an email that actually has a file ending in `.ics` attached. The sidebar only triggers when that file type is detected.
+
+**The date shows as 1601**
+
+* This means the parser grabbed the "Timezone Definition" date instead of the Event date. Ensure you are using the latest version of `Code.gs` from this repo, which includes the `split("BEGIN:VEVENT")` fix.
+
+##  License
+
+See the LICENSE file.
+
